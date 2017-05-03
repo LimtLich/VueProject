@@ -1,4 +1,4 @@
-# Ming's project
+# minggomin
 
 > A Vue.js project
 
