@@ -2,10 +2,21 @@
 <div>
   <img class='home-bac-img' src='/static/Images/IceCode.jpg' />
   <div class="home-shadow"></div>
+  <div class="Login" @click="LoginObj.showLogin = true">Login</div>
   <div class="home-topic">
     <p>Ming's Live View</p>
     <p>{{DateObj.Year}}</p>
     <p>{{DateObj.Month}}</p>
+  </div>
+  <div class="Login-dialog">
+    <el-dialog v-model="LoginObj.showLogin" size="tiny" :show-close="false" :close-on-click-modal="false">
+      <el-input v-model="LoginObj.account" placeholder="please enter your account"></el-input>
+      <el-input v-model="LoginObj.password" placeholder="please enter your password"></el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="LoginObj.showLogin = false">cancel</el-button>
+        <el-button type="primary" @click="LoginObj.showLogin = false">commit</el-button>
+      </span>
+    </el-dialog>
   </div>
 </div>
 </template>
@@ -56,6 +67,11 @@ export default {
           name: 'December '
         }]
       },
+      LoginObj:{
+        showLogin: false,
+        account:null,
+        password:null
+      }
     }
   },
   methods: {
@@ -73,6 +89,25 @@ export default {
 * {
   margin: 0;
   padding: 0;
+}
+
+.Login {
+  position: absolute;
+  top: 1%;
+  right: 1%;
+  font-weight: bold;
+  color: #dfdfdf;
+  font-style: italic;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.Login-dialog div{
+  /*margin-top:20px;*/
+}
+
+.Login-dialog input{
+  margin-top:20px;
 }
 
 .home-bac-img {
@@ -105,7 +140,7 @@ export default {
 
 .home-topic p:nth-child(1) {
   font-size: 12px;
-  color: #fff;
+  color: #EDDFC8;
 }
 
 .home-topic p:nth-child(2) {
@@ -113,7 +148,7 @@ export default {
 }
 
 .home-topic p:nth-child(3) {
-  color: #fff;
+  color: #EDDFC8;
   padding-bottom: 20px;
   border-bottom: 1px solid #dfdfdf;
 }
