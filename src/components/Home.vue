@@ -9,7 +9,7 @@
     <p>{{DateObj.Month}}</p>
   </div>
   <div class="Login-dialog">
-    <el-dialog v-model="LoginObj.showLogin" size="tiny" :show-close="false" :close-on-click-modal="false">
+    <el-dialog v-model="LoginObj.showLogin" size="tiny" @close="clearInput()" :show-close="false" :close-on-click-modal="false">
       <el-input v-model="LoginObj.account" placeholder="please enter your account"></el-input>
       <el-input v-model="LoginObj.password" placeholder="please enter your password"></el-input>
       <span slot="footer" class="dialog-footer">
@@ -75,7 +75,10 @@ export default {
     }
   },
   methods: {
-
+    clearInput(){
+      this.LoginObj.account = null
+      this.LoginObj.password = null
+    }
   },
   created() {
     this.DateObj.Year = new Date().getFullYear()
