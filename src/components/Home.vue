@@ -2,19 +2,20 @@
 <div>
   <img class='home-bac-img' src='/static/Images/IceCode.jpg' />
   <div class="home-shadow"></div>
-  <div class="Login" @click="LoginObj.showLogin = true">Login</div>
+  <div class="Login" @click="showLogin = true">Login</div>
   <div class="home-topic">
     <p>Ming's Live View</p>
     <p>{{DateObj.Year}}</p>
     <p>{{DateObj.Month}}</p>
   </div>
   <div class="Login-dialog">
-    <el-dialog v-model="LoginObj.showLogin" size="tiny" @close="clearInput()" :show-close="false" :close-on-click-modal="false">
+    <el-dialog v-model="showLogin" size="tiny" @close="clearInput()" :show-close="false" :close-on-click-modal="false">
+      <span>Login</span>
       <el-input v-model="LoginObj.account" placeholder="please enter your account"></el-input>
-      <el-input v-model="LoginObj.password" placeholder="please enter your password"></el-input>
+      <el-input type="password" v-model="LoginObj.password" placeholder="please enter your password"></el-input>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="LoginObj.showLogin = false">cancel</el-button>
-        <el-button type="primary" @click="LoginObj.showLogin = false">commit</el-button>
+        <el-button @click="showLogin = false">cancel</el-button>
+        <el-button type="primary" @click="commitLogin">commit</el-button>
       </span>
     </el-dialog>
   </div>
@@ -30,61 +31,28 @@ export default {
       DateObj: {
         Year: 2017,
         Month: 'June',
-        MonthTrans: [{
-          data: 0,
-          name: 'January '
-        }, {
-          data: 1,
-          name: 'February '
-        }, {
-          data: 2,
-          name: 'March '
-        }, {
-          data: 3,
-          name: 'April '
-        }, {
-          data: 4,
-          name: 'May  '
-        }, {
-          data: 5,
-          name: 'June  '
-        }, {
-          data: 6,
-          name: 'July '
-        }, {
-          data: 7,
-          name: 'August  '
-        }, {
-          data: 8,
-          name: 'September  '
-        }, {
-          data: 9,
-          name: 'October  '
-        }, {
-          data: 10,
-          name: 'November '
-        }, {
-          data: 11,
-          name: 'December '
-        }]
       },
-      LoginObj:{
-        showLogin: false,
-        account:null,
-        password:null
-      }
+      LoginObj: {
+        account: null,
+        password: null
+      },
+      showLogin: false,
     }
   },
   methods: {
-    clearInput(){
+    clearInput() {
       this.LoginObj.account = null
       this.LoginObj.password = null
+    },
+    commitLogin() {
+      authAPI.login(this.LoginObj).then((res)=>{
+        console.log(res)
+        this.showLogin = false
+      })
     }
   },
   created() {
-    authAPI.login()
-    this.DateObj.Year = new Date().getFullYear()
-    this.DateObj.Month = this.DateObj.MonthTrans.filter(e => e.data == new Date().getMonth())[0].name
+
   }
 }
 </script>
@@ -107,12 +75,13 @@ export default {
   cursor: pointer;
 }
 
-.Login-dialog div{
-  /*margin-top:20px;*/
+.Login-dialog span {
+  font-size: 14px;
+  font-weight: bold;
 }
 
-.Login-dialog input{
-  margin-top:20px;
+.Login-dialog input {
+  margin-top: 20px;
 }
 
 .home-bac-img {

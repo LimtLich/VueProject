@@ -1,6 +1,8 @@
 var exec = {
   login(req, res, next) {
     console.log('log in')
+    console.log(req.body)
+    return "success"
   }
 
 }
