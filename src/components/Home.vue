@@ -83,6 +83,15 @@ export default {
   font-weight: bold;
 }
 
+.Login-dialog>div>div {
+  margin-top: 10%;
+  background: #dfdfdf;
+}
+
+.Login-dialog>div>div>.el-dialog__body {
+  padding-top:10px;
+}
+
 .Login-dialog input {
   margin-top: 20px;
 }
