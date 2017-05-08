@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import authAPI from '../api/auth'
 export default {
   name: 'hello',
   data() {
@@ -81,6 +82,7 @@ export default {
     }
   },
   created() {
+    authAPI.login()
     this.DateObj.Year = new Date().getFullYear()
     this.DateObj.Month = this.DateObj.MonthTrans.filter(e => e.data == new Date().getMonth())[0].name
   }

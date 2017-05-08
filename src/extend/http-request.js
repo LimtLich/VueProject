@@ -1,4 +1,6 @@
-var Vue = require('vue')
+import Vue from 'vue'
+// mark 需在此重新声明Vue对vue-resource的引用，否则无法调用
+Vue.use(require('vue-resource'))
 export function get(url, params, timeout) {
     return new Promise(function(resolve, reject) {
         Vue.http.get(url, {
