@@ -45,9 +45,12 @@ export default {
       this.LoginObj.password = null
     },
     commitLogin() {
-      authAPI.login(this.LoginObj).then((res)=>{
+      authAPI.login(this.LoginObj).then((res) => {
         console.log(res)
         this.showLogin = false
+      }).catch((err) => {
+        this.$alert(err);
+        console.log(err)
       })
     }
   },

@@ -1,8 +1,21 @@
+var user = require('../../db/models/user')
 var exec = {
   login(req, res, next) {
-    console.log('log in')
-    console.log(req.body)
-    return "success"
+    var account = req.body.account
+    var password = req.body.password
+    return user.findOne({
+      where:{
+        account:account,
+        password:password
+      }
+    }).then((result)=>{
+      if(result){
+        return "success"
+      }else{
+        return Promise.reject('uncorrect account or password')
+      }
+    })
+
   }
 
 }
