@@ -4,7 +4,7 @@
   <div class="home-shadow"></div>
   <el-breadcrumb separator="|" class="Tab" v-show="!unLog">
     <el-breadcrumb-item>Welcome, {{name}}</el-breadcrumb-item>
-    <el-breadcrumb-item>Album-management</el-breadcrumb-item>
+    <el-breadcrumb-item :to="{ path: '/Album-management' }">Album-management</el-breadcrumb-item>
     <el-breadcrumb-item>
       <div @click="Logout" style="display:inline-block">Logout</div>
     </el-breadcrumb-item>
