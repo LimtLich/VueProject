@@ -1,8 +1,16 @@
 <template>
-<div>
+<div @keyup.enter="commitLogin">
   <img class='home-bac-img' src='/static/Images/IceCode.jpg' />
   <div class="home-shadow"></div>
-  <div class="Login" @click="showLogin = true">Login</div>
+  <el-breadcrumb separator="|" class="Tab" v-show="!unLog">
+    <el-breadcrumb-item>Welcome, {{name}}</el-breadcrumb-item>
+    <el-breadcrumb-item>Album-management</el-breadcrumb-item>
+    <el-breadcrumb-item>
+      <div @click="Logout" style="display:inline-block">Logout</div>
+    </el-breadcrumb-item>
+    <el-breadcrumb-item></el-breadcrumb-item>
+  </el-breadcrumb>
+  <div class="Login" v-show="unLog" @click="showLogin = true">Login</div>
   <div class="home-topic">
     <p>Ming's Live View</p>
     <p>{{DateObj.Year}}</p>
@@ -37,6 +45,8 @@ export default {
         password: null
       },
       showLogin: false,
+      unLog: true,
+      name: null,
     }
   },
   methods: {
@@ -45,17 +55,37 @@ export default {
       this.LoginObj.password = null
     },
     commitLogin() {
-      authAPI.login(this.LoginObj).then((res) => {
-        console.log(res)
+      authAPI.login(this.LoginObj).then((result) => {
+        this.unLog = false
+        this.name = result
         this.showLogin = false
       }).catch((err) => {
-        this.$alert(err);
-        console.log(err)
+        this.$alert(err, 'Erro', {
+          type: 'warning'
+        })
+      })
+    },
+    Logout() {
+      this.$confirm('Sure to logout?', 'Confirmation', {
+        confirmButtonText: 'Sure',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      }).then(() => {
+        authAPI.logout().then(() => {
+          this.unLog = true
+        })
+      }).catch(() => {
+
       })
     }
   },
   created() {
-
+    authAPI.getUser().then((result) => {
+      if (result) {
+        this.unLog = false
+        this.name = result
+      }
+    })
   }
 }
 </script>
@@ -65,6 +95,27 @@ export default {
 * {
   margin: 0;
   padding: 0;
+}
+
+.Tab {
+  position: absolute;
+  top: 1%;
+  right: 1%;
+}
+
+.Tab span {
+  color: #fff;
+  font-size: 14px;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.Tab>.el-breadcrumb__item:nth-child(1)>span:nth-child(1) {
+  cursor: inherit;
+}
+
+.Tab>.el-breadcrumb__item:nth-child(1)>span:nth-child(1):hover {
+  color: #fff;
 }
 
 .Login {
@@ -89,7 +140,7 @@ export default {
 }
 
 .Login-dialog>div>div>.el-dialog__body {
-  padding-top:10px;
+  padding-top: 10px;
 }
 
 .Login-dialog input {

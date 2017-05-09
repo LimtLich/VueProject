@@ -4,18 +4,24 @@ var exec = {
     var account = req.body.account
     var password = req.body.password
     return user.findOne({
-      where:{
-        account:account,
-        password:password
+      where: {
+        account: account,
+        password: password
       }
-    }).then((result)=>{
-      if(result){
-        return "success"
-      }else{
+    }).then((result) => {
+      if (result) {
+        req.session.user = result.account
+        return req.session.user
+      } else {
         return Promise.reject('uncorrect account or password')
       }
     })
-
+  },
+  logout(req, res, next) {
+    req.session.user = undefined
+  },
+  getUser(req,res,next){
+    return req.session.user
   }
 
 }

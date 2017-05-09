@@ -7,7 +7,7 @@ var role_permission = require('./models/role_permission')
 module.exports = function() {
   return Promise.all([
     user.create({
-      account: 'administrator',
+      account: 'ming',
       password: "admin"
     }),
     role.create({

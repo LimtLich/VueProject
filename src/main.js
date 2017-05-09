@@ -12,10 +12,17 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueResource)
 
+//router 2.0改变beforeEach
+router.beforeEach(function(to, from, next) {
+    next()
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   template: '<App/>',
-  components: { App }
+  components: {
+    App
+  }
 })
