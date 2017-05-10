@@ -25,9 +25,17 @@ router.beforeEach(function(to, from, next) {
     if (result) {
       userInfo.isLogIn = true
       userInfo.name = result
+      next()
+    }else{
+      if(to.path == '/'){
+        next()
+      }else{
+        router.push('/')
+      }
+      console.log(to.path)
     }
   })
-  next()
+
 })
 
 /* eslint-disable no-new */
