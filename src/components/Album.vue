@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import uploadAPI from '../api/upload'
 export default {
   data() {
     return {
@@ -32,7 +33,6 @@ export default {
   },
   methods: {
     handleRemove(file, fileList) {
-      console.log(111)
       console.log(file, fileList);
     },
     handlePictureCardPreview(file) {
@@ -52,7 +52,11 @@ export default {
     }
   },
   created() {
-
+    uploadAPI.getAllAttachment().then((result)=>{
+      console.log(result)
+    }).catch((err)=>{
+      console.log(err)
+    })
   }
 }
 </script>

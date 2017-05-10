@@ -48,6 +48,27 @@ var exec = {
       return Promise.reject("no file id")
     }
   },
+  getAllAttachment(req, res, next) {
+    var fs = require('fs')
+    var file = require('../../db/models/file')
+    var attachment = require('../../db/models/attachment')
+    attachment.belongsTo(file)
+    attachment.findAll({
+      include: file,
+    }).then((result) => {
+      if (result.length>0) {
+        var localFile = fs.readFileSync("upload/files/" + result[0].file_hash, 'binary')
+        console.log(localFile)
+        // res.setHeader('Content-disposition', 'inline; filename=' + encodeURIComponent(result.name))
+        // res.setHeader('Content-Type', result.file.type)
+        // res.setHeader('Content-Length', result.file.size)
+        // res.write(localFile, 'binary')
+        // res.end()
+      } else {
+        res.end("no file record")
+      }
+    })
+  },
   file(req) {
     return new Promise(function(resolve, reject) {
       if (req.method.toLowerCase() == 'post') {
