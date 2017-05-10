@@ -21,51 +21,27 @@ var dealFile = function(fileInfo) {
 
 var exec = {
   getAttachment(req, res, next) {
-    var id = req.query.id
-    if (id) {
+    var imgHash = req.query.hash
+    if (imgHash) {
       var fs = require('fs')
-      var file = require('../../db/models/file')
-      var attachment = require('../../db/models/attachment')
-      attachment.belongsTo(file)
-      attachment.findOne({
-        include: file,
-        where: {
-          id: id
-        }
-      }).then((result) => {
-        if (result != null) {
-          var localFile = fs.readFileSync("upload/files/" + result.file_hash, 'binary')
-          res.setHeader('Content-disposition', 'inline; filename=' + encodeURIComponent(result.name))
-          res.setHeader('Content-Type', result.file.type)
-          res.setHeader('Content-Length', result.file.size)
-          res.write(localFile, 'binary')
-          res.end()
-        } else {
-          res.end("no file record")
-        }
-      })
+      var localFile = fs.readFileSync("upload/files/" + imgHash, 'binary')
+      // res.setHeader('Content-disposition', 'inline; filename=' + encodeURIComponent(result.name))
+      // res.setHeader('Content-Type', result.file.type)
+      // res.setHeader('Content-Length', result.file.size)
+      res.write(localFile, 'binary')
+      res.end()
     } else {
-      return Promise.reject("no file id")
+      return Promise.reject("no file record")
     }
   },
   getAllAttachment(req, res, next) {
     var fs = require('fs')
     var file = require('../../db/models/file')
-    var attachment = require('../../db/models/attachment')
-    attachment.belongsTo(file)
-    attachment.findAll({
-      include: file,
-    }).then((result) => {
-      if (result.length>0) {
-        var localFile = fs.readFileSync("upload/files/" + result[0].file_hash, 'binary')
-        console.log(localFile)
-        // res.setHeader('Content-disposition', 'inline; filename=' + encodeURIComponent(result.name))
-        // res.setHeader('Content-Type', result.file.type)
-        // res.setHeader('Content-Length', result.file.size)
-        // res.write(localFile, 'binary')
-        // res.end()
-      } else {
-        res.end("no file record")
+    return file.findAll().then((result)=>{
+      if(result.length>0){
+        return result
+      }else{
+        return Promise.reject('no file record')
       }
     })
   },

@@ -12,11 +12,7 @@ export function get(url, params, timeout) {
       }
     }).then(function(res) {
       if (res.statusText == 'OK') {
-        if (res.data) {
-          resolve(res.data)
-        } else {
-          reject("error")
-        }
+        resolve(res.data)
       } else {
         reject(res.body)
       }
