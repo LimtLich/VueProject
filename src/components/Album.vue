@@ -5,15 +5,15 @@
   </el-button>
   <transition name="el-zoom-in-top">
     <div v-show="showupload" class="imgupload">
-      <el-upload class="uploadDiv" action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
+      <el-upload class="uploadDiv" action="/service/public/upload/file" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
         <i class="el-icon-plus"></i>
       </el-upload>
       <el-dialog v-model="dialogVisible" size="tiny">
         <img width="100%" :src="dialogImageUrl" alt="">
       </el-dialog>
-      <el-button @click="showupload = !showupload" :plain="true" type="info">Commit upload
+      <!-- <el-button @click="commitUpload" :plain="true" type="info">Commit upload
         <i class="el-icon-upload el-icon--right"></i>
-      </el-button>
+      </el-button> -->
     </div>
   </transition>
 </div>
@@ -23,7 +23,6 @@
 export default {
   data() {
     return {
-      fileList2: [],
       showupload: false,
       dialogImageUrl: '',
       dialogVisible: false,
@@ -33,6 +32,7 @@ export default {
   },
   methods: {
     handleRemove(file, fileList) {
+      console.log(111)
       console.log(file, fileList);
     },
     handlePictureCardPreview(file) {

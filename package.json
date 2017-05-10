@@ -18,9 +18,12 @@
   "dependencies": {
     "element-ui": "^1.2.9",
     "express-session": "^1.15.2",
+    "formidable": "^1.1.1",
+    "fs": "^0.0.1-security",
     "require-dir": "^0.3.1",
     "sequelize": "^3.30.4",
     "sqlite3": "^3.1.8",
+    "util": "^0.10.3",
     "vue": "^2.2.6",
     "vue-resource2": "^0.1.0",
     "vue-router": "^2.3.1"
