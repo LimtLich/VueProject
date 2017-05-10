@@ -45,7 +45,7 @@ export default {
         password: null
       },
       UserInfo: {
-        isLogIn: null,
+
       },
       showLogin: false,
     }
@@ -57,8 +57,8 @@ export default {
     },
     commitLogin() {
       authAPI.login(this.LoginObj).then((result) => {
-        this.unLog = false
-        this.name = result
+        this.UserInfo.isLogIn = true
+        this.UserInfo.name = result
         this.showLogin = false
       }).catch((err) => {
         this.$alert(err, 'Erro', {
@@ -73,7 +73,7 @@ export default {
         type: 'warning'
       }).then(() => {
         authAPI.logout().then(() => {
-          this.unLog = true
+          this.UserInfo.isLogIn = false
         })
       }).catch(() => {
         this.$alert(err, 'Erro', {
