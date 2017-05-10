@@ -75,7 +75,9 @@ export default {
           this.unLog = true
         })
       }).catch(() => {
-
+        this.$alert(err, 'Erro', {
+          type: 'warning'
+        })
       })
     }
   },
@@ -85,6 +87,10 @@ export default {
         this.unLog = false
         this.name = result
       }
+    }).catch((err) => {
+      this.$alert(err, 'Erro', {
+        type: 'warning'
+      })
     })
   }
 }

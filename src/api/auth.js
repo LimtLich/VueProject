@@ -1,4 +1,4 @@
-var httpRequest = require('../extend/http-request')
+var httpRequest = require('../extend/Axios')
 var path = '/service/public/auth/'
 export default {
     login(params) {

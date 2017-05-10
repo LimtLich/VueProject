@@ -16,6 +16,7 @@
     "server": "node build/run_server.js"
   },
   "dependencies": {
+    "axios": "^0.16.1",
     "element-ui": "^1.2.9",
     "express-session": "^1.15.2",
     "formidable": "^1.1.1",
