@@ -2,15 +2,15 @@
 <div @keyup.enter="commitLogin">
   <img class='home-bac-img' src='/static/Images/IceCode.jpg' />
   <div class="home-shadow"></div>
-  <el-breadcrumb separator="|" class="Tab" v-show="!unLog">
-    <el-breadcrumb-item>Welcome, {{name}}</el-breadcrumb-item>
+  <el-breadcrumb separator="|" class="Tab" v-show="UserInfo.isLogIn">
+    <el-breadcrumb-item>Welcome, {{UserInfo.name}}</el-breadcrumb-item>
     <el-breadcrumb-item :to="{ path: '/Album-management' }">Album-management</el-breadcrumb-item>
     <el-breadcrumb-item>
       <div @click="Logout" style="display:inline-block">Logout</div>
     </el-breadcrumb-item>
     <el-breadcrumb-item></el-breadcrumb-item>
   </el-breadcrumb>
-  <div class="Login" v-show="unLog" @click="showLogin = true">Login</div>
+  <div class="Login" v-show="!UserInfo.isLogIn" @click="showLogin = true">Login</div>
   <div class="home-topic">
     <p>Ming's Live View</p>
     <p>{{DateObj.Year}}</p>
@@ -44,9 +44,10 @@ export default {
         account: null,
         password: null
       },
+      UserInfo: {
+        isLogIn: null,
+      },
       showLogin: false,
-      unLog: true,
-      name: null,
     }
   },
   methods: {
@@ -82,16 +83,7 @@ export default {
     }
   },
   created() {
-    authAPI.getUser().then((result) => {
-      if (result) {
-        this.unLog = false
-        this.name = result
-      }
-    }).catch((err) => {
-      this.$alert(err, 'Erro', {
-        type: 'warning'
-      })
-    })
+    this.UserInfo = UserInfo
   }
 }
 </script>

@@ -5,7 +5,13 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
 import VueResource from 'vue-resource'
+import authAPI from './api/auth'
 import 'element-ui/lib/theme-default/index.css'
+
+window.UserInfo = {
+  isLogIn: false,
+  name: null
+};
 
 Vue.config.productionTip = false
 
@@ -14,7 +20,14 @@ Vue.use(VueResource)
 
 //router 2.0改变beforeEach
 router.beforeEach(function(to, from, next) {
-    next()
+  authAPI.getUser().then((result) => {
+    var userInfo = window.UserInfo;
+    if (result) {
+      userInfo.isLogIn = true
+      userInfo.name = result
+    }
+  })
+  next()
 })
 
 /* eslint-disable no-new */
