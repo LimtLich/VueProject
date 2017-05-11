@@ -29,8 +29,9 @@ export default {
         return false
       }
     },
-    handleSuccess() {
-      this.getAllImages()
+    handleSuccess(response, file, fileList) {
+      response.url = '/service/public/upload/getAttachment?hash=' + response.file_hash
+      this.allImages.push(response)
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -39,20 +40,17 @@ export default {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
-    getAllImages() {
-      uploadAPI.getAllAttachment().then((result) => {
-        result.map((e) => {
-          e.url = '/service/public/upload/getAttachment?hash=' + e.hash
-        })
-        this.allImages = result
-      }).catch((err) => {
-        console.log(err)
-      })
-    }
   },
   watch: {},
   created() {
-    this.getAllImages()
+    uploadAPI.getAllAttachment().then((result) => {
+      result.map((e) => {
+        e.url = '/service/public/upload/getAttachment?hash=' + e.hash
+      })
+      this.allImages = result
+    }).catch((err) => {
+      console.log(err)
+    })
   }
 }
 </script>
