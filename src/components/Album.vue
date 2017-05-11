@@ -10,6 +10,25 @@
       </el-dialog>
     </div>
   </transition>
+  <el-dialog title="Picture information" v-model="showForm">
+    <el-form ref="form" :model="form" label-width="80px">
+      <el-form-item label="Name">
+        <el-input v-model="form.name" placeholder="set name"></el-input>
+      </el-form-item>
+      <el-form-item label="date">
+        <el-col :span="11">
+          <el-date-picker type="date" placeholder="set date" v-model="form.date" style="width: 100%;"></el-date-picker>
+        </el-col>
+      </el-form-item>
+      <el-form-item label="describition">
+        <el-input type="textarea" v-model="form.desc"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">Commit</el-button>
+        <el-button>Cancel</el-button>
+      </el-form-item>
+    </el-form>
+  </el-dialog>
 </div>
 </template>
 
@@ -20,14 +39,22 @@ export default {
     return {
       dialogImageUrl: '',
       dialogVisible: false,
+      showForm:false,
       allImages: [],
+      form: {
+        name: '',
+        date: '',
+        desc: ''
+      }
     }
   },
   methods: {
     beforeUpload(file) {
-      if (this.allImages.filter(e => e.name == file.name).length > 0) {
-        return false
-      }
+      this.showForm = true
+      return false
+      // if (this.allImages.filter(e => e.name == file.name).length > 0) {
+      //   return false
+      // }
     },
     handleSuccess(response, file, fileList) {
       response.url = '/service/public/upload/getAttachment?hash=' + response.file_hash
@@ -39,6 +66,9 @@ export default {
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+    onSubmit() {
+      console.log('submit!');
     },
   },
   watch: {},
