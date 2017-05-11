@@ -13,20 +13,19 @@
       <img class='home-bac-img' :src="item.url" />
       <div class="home-shadow"></div>
       <div class="Login" v-show="!UserInfo.isLogIn" @click="showLogin = true">Login</div>
-      <div class="Login-dialog">
-        <el-dialog v-model="showLogin" size="tiny" @close="clearInput()" :show-close="false" :close-on-click-modal="false">
-          <span>Login</span>
-          <el-input v-model="LoginObj.account" placeholder="please enter your account"></el-input>
-          <el-input type="password" v-model="LoginObj.password" placeholder="please enter your password"></el-input>
-          <span slot="footer" class="dialog-footer">
-            <el-button @click="showLogin = false">cancel</el-button>
-            <el-button type="primary" @click="commitLogin">commit</el-button>
-          </span>
-        </el-dialog>
-      </div>
     </el-carousel-item>
   </el-carousel>
-
+  <div class="Login-dialog">
+    <el-dialog v-model="showLogin" size="tiny" @close="clearInput()" :show-close="false" :close-on-click-modal="false">
+      <span>Login</span>
+      <el-input v-model="LoginObj.account" placeholder="please enter your account"></el-input>
+      <el-input type="password" v-model="LoginObj.password" placeholder="please enter your password"></el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="showLogin = false">cancel</el-button>
+        <el-button type="primary" @click="commitLogin">commit</el-button>
+      </span>
+    </el-dialog>
+  </div>
 </div>
 </template>
 
