@@ -10,7 +10,8 @@ var dealFile = function(fileInfo) {
     hash: fileInfo.hash,
     size: fileInfo.size,
     path: "upload/files/" + fileInfo.hash,
-    type: fileInfo.type
+    type: fileInfo.type,
+    name: fileInfo.name
   }).then(() => {
     return attachment.create({
       file_hash: fileInfo.hash,
@@ -25,9 +26,6 @@ var exec = {
     if (imgHash) {
       var fs = require('fs')
       var localFile = fs.readFileSync("upload/files/" + imgHash, 'binary')
-      // res.setHeader('Content-disposition', 'inline; filename=' + encodeURIComponent(result.name))
-      // res.setHeader('Content-Type', result.file.type)
-      // res.setHeader('Content-Length', result.file.size)
       res.write(localFile, 'binary')
       res.end()
     } else {
@@ -37,10 +35,10 @@ var exec = {
   getAllAttachment(req, res, next) {
     var fs = require('fs')
     var file = require('../../db/models/file')
-    return file.findAll().then((result)=>{
-      if(result.length>0){
+    return file.findAll().then((result) => {
+      if (result.length > 0) {
         return result
-      }else{
+      } else {
         return Promise.reject('no file record')
       }
     })
