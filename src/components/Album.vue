@@ -11,11 +11,14 @@
       <el-dialog v-model="dialogVisible" size="tiny">
         <img width="100%" :src="dialogImageUrl" alt="">
       </el-dialog>
-      <!-- <el-button @click="commitUpload" :plain="true" type="info">Commit upload
-        <i class="el-icon-upload el-icon--right"></i>
-      </el-button> -->
     </div>
   </transition>
+  <div>
+    <div class="shadow"></div>
+    <div v-for="item in allImages">
+      <img :src="'/service/public/upload/getAttachment?hash='+item.hash" />
+    </div>
+  </div>
 </div>
 </template>
 
@@ -28,7 +31,8 @@ export default {
       dialogImageUrl: '',
       dialogVisible: false,
       head_title: 'Picture upload',
-      head_icon:'el-icon-upload2 el-icon--right',
+      head_icon: 'el-icon-upload2 el-icon--right',
+      allImages: []
     }
   },
   methods: {
@@ -42,19 +46,20 @@ export default {
   },
   watch: {
     showupload(val) {
-      if(val){
+      if (val) {
         this.head_title = 'Close'
         this.head_icon = 'el-icon-circle-close el-icon--right'
-      }else{
+      } else {
         this.head_title = 'Picture upload'
         this.head_icon = 'el-icon-upload2 el-icon--right'
       }
     }
   },
   created() {
-    uploadAPI.getAllAttachment().then((result)=>{
+    uploadAPI.getAllAttachment().then((result) => {
       console.log(result)
-    }).catch((err)=>{
+      this.allImages = result
+    }).catch((err) => {
       console.log(err)
     })
   }
@@ -74,8 +79,9 @@ export default {
 }
 
 .imgupload {
-  border-left: 1px solid #dfdfdf;
-  height: 100%;
+  position: absolute;
+  width: 100%;
+  background: #fff;
   border: 1px solid #dfdfdf;
   padding-bottom: 1%;
 }
