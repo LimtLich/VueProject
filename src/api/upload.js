@@ -4,4 +4,7 @@ export default {
   getAllAttachment(params) {
     return httpRequest.get(path + 'getAllAttachment')
   },
+  getAttachmentById(params) {
+    return httpRequest.get(path + 'getAttachmentById', params)
+  }
 }

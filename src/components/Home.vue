@@ -1,7 +1,5 @@
 <template>
 <div @keyup.enter="commitLogin">
-  <img class='home-bac-img' src='/static/Images/IceCode.jpg' />
-  <div class="home-shadow"></div>
   <el-breadcrumb separator="|" class="Tab" v-show="UserInfo.isLogIn">
     <el-breadcrumb-item>Welcome, {{UserInfo.name}}</el-breadcrumb-item>
     <el-breadcrumb-item :to="{ path: '/Album-management' }">Album-management</el-breadcrumb-item>
@@ -10,28 +8,31 @@
     </el-breadcrumb-item>
     <el-breadcrumb-item></el-breadcrumb-item>
   </el-breadcrumb>
-  <div class="Login" v-show="!UserInfo.isLogIn" @click="showLogin = true">Login</div>
-  <div class="home-topic">
-    <p>Ming's Live View</p>
-    <p>{{DateObj.Year}}</p>
-    <p>{{DateObj.Month}}</p>
-  </div>
-  <div class="Login-dialog">
-    <el-dialog v-model="showLogin" size="tiny" @close="clearInput()" :show-close="false" :close-on-click-modal="false">
-      <span>Login</span>
-      <el-input v-model="LoginObj.account" placeholder="please enter your account"></el-input>
-      <el-input type="password" v-model="LoginObj.password" placeholder="please enter your password"></el-input>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="showLogin = false">cancel</el-button>
-        <el-button type="primary" @click="commitLogin">commit</el-button>
-      </span>
-    </el-dialog>
-  </div>
+  <el-carousel height="100%" class="carousel" :autoplay="false">
+    <el-carousel-item v-for="item in backgroundImages" :key="item">
+      <img class='home-bac-img' :src="item.url" />
+      <div class="home-shadow"></div>
+      <div class="Login" v-show="!UserInfo.isLogIn" @click="showLogin = true">Login</div>
+      <div class="Login-dialog">
+        <el-dialog v-model="showLogin" size="tiny" @close="clearInput()" :show-close="false" :close-on-click-modal="false">
+          <span>Login</span>
+          <el-input v-model="LoginObj.account" placeholder="please enter your account"></el-input>
+          <el-input type="password" v-model="LoginObj.password" placeholder="please enter your password"></el-input>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="showLogin = false">cancel</el-button>
+            <el-button type="primary" @click="commitLogin">commit</el-button>
+          </span>
+        </el-dialog>
+      </div>
+    </el-carousel-item>
+  </el-carousel>
+
 </div>
 </template>
 
 <script>
 import authAPI from '../api/auth'
+import uploadAPI from '../api/upload'
 export default {
   name: 'hello',
   data() {
@@ -48,6 +49,7 @@ export default {
 
       },
       showLogin: false,
+      backgroundImages: [],
     }
   },
   methods: {
@@ -84,6 +86,18 @@ export default {
   },
   created() {
     this.UserInfo = UserInfo
+    uploadAPI.getAllAttachment().then((result) => {
+      result.map((e) => {
+        e.url = '/service/public/upload/getAttachment?hash=' + e.hash
+      })
+      this.backgroundImages = result
+    }).catch((err) => {
+      this.backgroundImages.push({
+        name: 'default',
+        url: '/static/Images/IceCode.jpg'
+      })
+      console.log(err)
+    })
   }
 }
 </script>
@@ -95,10 +109,17 @@ export default {
   padding: 0;
 }
 
+.carousel {
+  position: absolute!important;
+  width: 100%;
+  height: 100%;
+}
+
 .Tab {
   position: absolute;
   top: 1%;
   right: 1%;
+  z-index: 9999;
 }
 
 .Tab span {
@@ -157,34 +178,5 @@ export default {
   position: absolute;
   opacity: 0.3;
   /*background:-webkit-gradient(linear, 0 0, 0 bottom, from(#fff), to(#000))*/
-}
-
-.home-topic {
-  position: absolute;
-  top: 5%;
-  left: 5%;
-  font-weight: bold;
-  font-style: italic;
-  text-align: left;
-}
-
-.home-topic p {
-  margin-top: 20px;
-  font-size: 35px;
-}
-
-.home-topic p:nth-child(1) {
-  font-size: 12px;
-  color: #EDDFC8;
-}
-
-.home-topic p:nth-child(2) {
-  color: #000;
-}
-
-.home-topic p:nth-child(3) {
-  color: #EDDFC8;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #dfdfdf;
 }
 </style>
