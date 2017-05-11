@@ -16,6 +16,7 @@ var file = sequelize.define(
     path: Sequelize.STRING,
     type: Sequelize.STRING,
     name: Sequelize.STRING,
+    describe: Sequelize.STRING,
   }, {
     underscored: true
   })
