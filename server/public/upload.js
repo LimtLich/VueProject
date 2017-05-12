@@ -71,6 +71,24 @@ var exec = {
       }
     })
   },
+  setPictureAttribute(req, res, next) {
+    var form = req.body.form
+    var file = require('../../db/models/file')
+    return file.findOne({
+      where: {
+        hash: form.hash
+      }
+    }).then((result) => {
+      if (result) {
+        result.pic_name = form.name
+        result.date = form.date
+        result.describe = form.desc
+        return result.save()
+      } else {
+        return Promise.reject('no file record')
+      }
+    })
+  },
   file(req) {
     return new Promise(function(resolve, reject) {
       if (req.method.toLowerCase() == 'post') {

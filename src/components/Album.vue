@@ -7,7 +7,7 @@
       <i class="el-icon-upload"></i>Picture-Upload</el-menu-item>
   </el-menu>
   <el-row :gutter="20" class="gutter">
-    <el-col :span="4" v-for="item in allImages" class="gutter_child">
+    <el-col :span="4" v-for="item in allImages" :key="item.name" class="gutter_child">
       <img class='gutter_picture' :src="item.url" />
       <el-button>
         <i class="el-icon-document"></i>edit</el-button>
@@ -65,24 +65,23 @@ export default {
       uploadSubmit: false,
       allImages: [],
       form: {
-        name: '',
-        date: '',
-        desc: ''
+        hash: null,
+        name: null,
+        date: null,
+        desc: null,
       }
     }
   },
   methods: {
     beforeUpload(file) {
-      // if (this.allImages.filter(e => e.name == file.name).length > 0) {
-      //   return false
-      // } else {
-      //   this.showForm = true
-      //   if (!this.uploadSubmit) {
-      //     return false
-      //   }
-      // }
+      if (this.allImages.filter(e => e.name == file.name).length > 0) {
+        return false
+      } else {
+        this.showForm = true
+      }
     },
     handleSuccess(response, file, fileList) {
+      this.form.hash = response.file_hash
       response.url = '/service/public/upload/getAttachment?hash=' + response.file_hash;
       this.allImages.push(response);
     },
@@ -101,8 +100,18 @@ export default {
       }
     },
     onSubmit() {
-      console.log(this.form);
-      // this.uploadSubmit = true
+      console.log(this.form.hash)
+      if (this.form.hash && this.form.name && this.form.date && this.form.desc) {
+        uploadAPI.setPictureAttribute({
+          form: this.form
+        }).then((result) => {
+          console.log(result)
+        })
+      } else {
+        this.$alert('please finish all inputs', 'Erro', {
+          type: 'warning'
+        })
+      }
     },
   },
   watch: {},
@@ -127,11 +136,11 @@ export default {
 }
 
 .gutter {
-  margin:0 1% 0 1%!important;
+  margin: 0 1% 0 1%!important;
 }
 
-.gutter_child{
-  margin-top:1%;
+.gutter_child {
+  margin-top: 1%;
 }
 
 .gutter_picture {

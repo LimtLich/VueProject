@@ -6,5 +6,8 @@ export default {
   },
   getAttachmentById(params) {
     return httpRequest.get(path + 'getAttachmentById', params)
+  },
+  setPictureAttribute(params) {
+    return httpRequest.post(path + 'setPictureAttribute', params)
   }
 }
