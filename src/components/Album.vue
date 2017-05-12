@@ -1,12 +1,33 @@
 <template>
 <div>
+  <el-menu class="el-menu-demo" mode="horizontal" @select="handleSelect">
+    <el-menu-item index="/">
+      <i class="el-icon-arrow-left"></i>Home</el-menu-item>
+    <el-menu-item index="upload">
+      <i class="el-icon-upload"></i>Picture-Upload</el-menu-item>
+  </el-menu>
+  <el-row :gutter="20" class="gutter">
+    <el-col :span="4" v-for="item in allImages" class="gutter_child">
+      <img class='gutter_picture' :src="item.url" />
+      <el-button>
+        <i class="el-icon-document"></i>edit</el-button>
+      <el-button>
+        <i class="el-icon-delete"></i>delete</el-button>
+    </el-col>
+  </el-row>
   <transition name="el-zoom-in-top">
     <div class="imgupload">
-      <el-upload action="/service/public/upload/file" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-success="handleSuccess" :on-remove="handleRemove" :file-list="allImages" :before-upload="beforeUpload">
-        <i class="el-icon-plus"></i>
-      </el-upload>
       <el-dialog v-model="dialogVisible" size="tiny">
         <img width="100%" :src="dialogImageUrl" alt="">
+      </el-dialog>
+      <el-dialog v-model="showUpload" size="tiny">
+        <el-upload class="" drag action="/service/public/upload/file" :on-preview="handlePictureCardPreview" :on-success="handleSuccess" :on-remove="handleRemove" :before-upload="beforeUpload" multiple>
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">将文件拖到此处，或
+            <em>点击上传</em>
+          </div>
+          <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+        </el-upload>
       </el-dialog>
     </div>
   </transition>
@@ -25,7 +46,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Commit</el-button>
-        <el-button>Cancel</el-button>
+        <el-button @click="showForm = !showForm">Cancel</el-button>
       </el-form-item>
     </el-form>
   </el-dialog>
@@ -39,7 +60,9 @@ export default {
     return {
       dialogImageUrl: '',
       dialogVisible: false,
-      showForm:false,
+      showForm: false,
+      showUpload: false,
+      uploadSubmit: false,
       allImages: [],
       form: {
         name: '',
@@ -50,15 +73,18 @@ export default {
   },
   methods: {
     beforeUpload(file) {
-      this.showForm = true
-      return false
       // if (this.allImages.filter(e => e.name == file.name).length > 0) {
       //   return false
+      // } else {
+      //   this.showForm = true
+      //   if (!this.uploadSubmit) {
+      //     return false
+      //   }
       // }
     },
     handleSuccess(response, file, fileList) {
-      response.url = '/service/public/upload/getAttachment?hash=' + response.file_hash
-      this.allImages.push(response)
+      response.url = '/service/public/upload/getAttachment?hash=' + response.file_hash;
+      this.allImages.push(response);
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -67,8 +93,16 @@ export default {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
+    handleSelect(key) {
+      if (key == 'upload') {
+        this.showUpload = true;
+      } else {
+        this.$router.push(key);
+      }
+    },
     onSubmit() {
-      console.log('submit!');
+      console.log(this.form);
+      // this.uploadSubmit = true
     },
   },
   watch: {},
@@ -90,6 +124,18 @@ export default {
 * {
   margin: 0;
   padding: 0;
+}
+
+.gutter {
+  margin:0 1% 0 1%!important;
+}
+
+.gutter_child{
+  margin-top:1%;
+}
+
+.gutter_picture {
+  width: 100%;
 }
 
 .imgupload {}

@@ -108,6 +108,10 @@ export default {
   padding: 0;
 }
 
+.el-carousel__indicators{
+  display: none!important;
+}
+
 .carousel {
   position: absolute!important;
   width: 100%;
