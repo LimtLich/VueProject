@@ -80,9 +80,9 @@ var exec = {
       }
     }).then((result) => {
       if (result) {
-        result.pic_name = form.name
+        result.pic_name = form.pic_name
         result.date = form.date
-        result.describe = form.desc
+        result.describe = form.describe
         return result.save()
       } else {
         return Promise.reject('no file record')

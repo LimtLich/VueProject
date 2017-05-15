@@ -7,11 +7,11 @@
       <i class="el-icon-upload"></i>Picture-Upload</el-menu-item>
   </el-menu>
   <el-row :gutter="20" class="gutter">
-    <el-col :span="4" v-for="item in allImages" :key="item.name" class="gutter_child">
+    <el-col :span="4" v-for="(item,index) in allImages" :key="item.name" class="gutter_child">
       <img class='gutter_picture' :src="item.url" />
-      <el-button>
+      <el-button @click="editPic(index)">
         <i class="el-icon-document"></i>edit</el-button>
-      <el-button>
+      <el-button @click="deletePic(index)">
         <i class="el-icon-delete"></i>delete</el-button>
     </el-col>
   </el-row>
@@ -34,7 +34,7 @@
   <el-dialog title="Picture information" v-model="showForm">
     <el-form ref="form" :model="form" label-width="80px">
       <el-form-item label="Name">
-        <el-input v-model="form.name" placeholder="set name"></el-input>
+        <el-input v-model="form.pic_name" placeholder="set name"></el-input>
       </el-form-item>
       <el-form-item label="date">
         <el-col :span="11">
@@ -42,7 +42,7 @@
         </el-col>
       </el-form-item>
       <el-form-item label="describition">
-        <el-input type="textarea" v-model="form.desc"></el-input>
+        <el-input type="textarea" v-model="form.describe"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Commit</el-button>
@@ -66,17 +66,34 @@ export default {
       allImages: [],
       form: {
         hash: null,
-        name: null,
+        pic_name: null,
         date: null,
-        desc: null,
+        describe: null,
       }
     }
   },
   methods: {
+    init() {
+      this.form = {
+        hash: null,
+        pic_name: null,
+        date: null,
+        describe: null,
+      }
+      uploadAPI.getAllAttachment().then((result) => {
+        result.map((e) => {
+          e.url = '/service/public/upload/getAttachment?hash=' + e.hash
+        })
+        this.allImages = result
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
     beforeUpload(file) {
       if (this.allImages.filter(e => e.name == file.name).length > 0) {
         return false
       } else {
+        this.init()
         this.showForm = true
       }
     },
@@ -99,12 +116,22 @@ export default {
         this.$router.push(key);
       }
     },
+    editPic(index) {
+      this.form = this.allImages[index]
+      this.showForm = true
+      console.log(this.allImages[index])
+    },
+    deletePic(index) {
+      console.log(index)
+    },
     onSubmit() {
       console.log(this.form.hash)
-      if (this.form.hash && this.form.name && this.form.date && this.form.desc) {
+      if (this.form.hash && this.form.pic_name && this.form.date && this.form.describe) {
         uploadAPI.setPictureAttribute({
           form: this.form
         }).then((result) => {
+          this.init()
+          this.showForm = false
           console.log(result)
         })
       } else {
@@ -116,14 +143,7 @@ export default {
   },
   watch: {},
   created() {
-    uploadAPI.getAllAttachment().then((result) => {
-      result.map((e) => {
-        e.url = '/service/public/upload/getAttachment?hash=' + e.hash
-      })
-      this.allImages = result
-    }).catch((err) => {
-      console.log(err)
-    })
+    this.init()
   }
 }
 </script>
