@@ -6,6 +6,9 @@ import router from './router'
 import ElementUI from 'element-ui'
 import VueResource from 'vue-resource'
 import authAPI from './api/auth'
+import {
+  dateformat
+} from './extend/date-format'
 import 'element-ui/lib/theme-default/index.css'
 
 window.UserInfo = {
@@ -14,6 +17,8 @@ window.UserInfo = {
 };
 
 Vue.config.productionTip = false
+
+dateformat()
 
 Vue.use(ElementUI)
 Vue.use(VueResource)
@@ -26,10 +31,10 @@ router.beforeEach(function(to, from, next) {
       userInfo.isLogIn = true
       userInfo.name = result
       next()
-    }else{
-      if(to.path == '/'){
+    } else {
+      if (to.path == '/') {
         next()
-      }else{
+      } else {
         router.push('/')
       }
       console.log(to.path)

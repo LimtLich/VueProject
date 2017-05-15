@@ -12,6 +12,11 @@
     <el-carousel-item v-for="item in backgroundImages" :key="item">
       <img class='home-bac-img' :src="item.url" />
       <div class="home-shadow"></div>
+      <div class="home-message">
+        <div>{{item.pic_name}}</div>
+        <div>{{item.date}}</div>
+      </div>
+      <div class="home-massage-desc">{{item.describe}}</div>
       <div class="Login" v-show="!UserInfo.isLogIn" @click="showLogin = true">Login</div>
     </el-carousel-item>
   </el-carousel>
@@ -89,6 +94,9 @@ export default {
       result.map((e) => {
         e.url = '/service/public/upload/getAttachment?hash=' + e.hash
       })
+      result.map((e) => {
+        e.date = new Date(e.date).Format("yyyy-MM-dd")
+      })
       this.backgroundImages = result
     }).catch((err) => {
       this.backgroundImages.push({
@@ -108,7 +116,23 @@ export default {
   padding: 0;
 }
 
-.el-carousel__indicators{
+.home-message {
+  position: absolute;
+  top: 15%;
+  left: 5%;
+  z-index: 9999;
+  color:#fff;
+}
+
+.home-massage-desc{
+  position:absolute;
+  left:45%;
+  bottom:20%;
+  color:#fff;
+  font-weight: bold;
+}
+
+.el-carousel__indicators {
   display: none!important;
 }
 
@@ -179,7 +203,7 @@ export default {
   height: 100%;
   background: #000;
   position: absolute;
-  opacity: 0.3;
+  opacity: 0.4;
   /*background:-webkit-gradient(linear, 0 0, 0 bottom, from(#fff), to(#000))*/
 }
 </style>
