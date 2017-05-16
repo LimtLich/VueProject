@@ -89,6 +89,23 @@ var exec = {
       }
     })
   },
+  deletePic(req, res, next) {
+    var hash = req.body.hash
+    var file = require('../../db/models/file')
+    var attachment = require('../../db/models/attachment')
+    return Promise.all([
+      file.destroy({
+        where:{
+          hash:hash
+        }
+      }),
+      attachment.destroy({
+        where:{
+          file_hash:hash
+        }
+      })
+    ])
+  },
   file(req) {
     return new Promise(function(resolve, reject) {
       if (req.method.toLowerCase() == 'post') {

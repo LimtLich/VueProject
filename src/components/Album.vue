@@ -122,6 +122,23 @@ export default {
       console.log(this.allImages[index])
     },
     deletePic(index) {
+      this.$confirm('Sure to delete this picture?', 'Confirmation', {
+        confirmButtonText: 'Sure',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      }).then(() => {
+        var hash = this.allImages[index].hash
+        console.log(hash)
+        uploadAPI.deletePic({
+          hash: hash
+        }).then(() => {
+          this.init()
+        }).catch((err) => {
+          this.$alert(err, 'Erro', {
+            type: 'warning'
+          })
+        })
+      }).catch(() => {})
       console.log(index)
     },
     onSubmit() {

@@ -9,5 +9,8 @@ export default {
   },
   setPictureAttribute(params) {
     return httpRequest.post(path + 'setPictureAttribute', params)
-  }
+  },
+  deletePic(params) {
+    return httpRequest.post(path + 'deletePic', params)
+  },
 }
