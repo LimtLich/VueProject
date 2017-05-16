@@ -21,7 +21,7 @@
         <img width="100%" :src="dialogImageUrl" alt="">
       </el-dialog>
       <el-dialog v-model="showUpload" size="tiny">
-        <el-upload class="" drag action="/service/public/upload/file" :on-preview="handlePictureCardPreview" :on-success="handleSuccess" :on-remove="handleRemove" :before-upload="beforeUpload" multiple>
+        <el-upload class="" drag action="/service/public/upload/file" :file-list="fileList" :on-preview="handlePictureCardPreview" :on-success="handleSuccess" :on-remove="handleRemove" :before-upload="beforeUpload" multiple>
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">将文件拖到此处，或
             <em>点击上传</em>
@@ -64,6 +64,7 @@ export default {
       showUpload: false,
       uploadSubmit: false,
       allImages: [],
+      fileList:[],
       form: {
         hash: null,
         pic_name: null,
@@ -91,6 +92,7 @@ export default {
     },
     beforeUpload(file) {
       if (this.allImages.filter(e => e.name == file.name).length > 0) {
+        console.log(this.allImages)
         return false
       } else {
         this.init()
@@ -128,10 +130,10 @@ export default {
         type: 'warning'
       }).then(() => {
         var hash = this.allImages[index].hash
-        console.log(hash)
         uploadAPI.deletePic({
           hash: hash
         }).then(() => {
+          this.fileList = [];
           this.init()
         }).catch((err) => {
           this.$alert(err, 'Erro', {
