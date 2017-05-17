@@ -64,7 +64,7 @@ export default {
       showUpload: false,
       uploadSubmit: false,
       allImages: [],
-      fileList:[],
+      fileList: [],
       form: {
         hash: null,
         pic_name: null,
@@ -87,6 +87,7 @@ export default {
         })
         this.allImages = result
       }).catch((err) => {
+        this.allImages = []
         console.log(err)
       })
     },
@@ -130,6 +131,7 @@ export default {
         type: 'warning'
       }).then(() => {
         var hash = this.allImages[index].hash
+        console.log(hash)
         uploadAPI.deletePic({
           hash: hash
         }).then(() => {
