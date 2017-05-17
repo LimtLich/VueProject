@@ -195,6 +195,8 @@ export default {
 
 .home-bac-img {
   position: fixed;
+  width:100%;
+  height:100%;
   left: 0;
 }
 
